@@ -1,0 +1,29 @@
+export interface Processo {
+  id: number;
+  numeroProcesso: string;
+  nomeCliente: string;
+  status: StatusProcesso;
+  descricao: string;
+  dataPrazo: string;
+  etiquetas?: string[];
+}
+
+
+export type StatusProcesso =
+  | "Triagem"
+  | "Petição Inicial"
+  | "Em Andamento"
+  | "Aguardando Prazo"
+  | "Concluído";
+
+export type ProcessoCreate = Omit<Processo, "id">;
+
+export const KANBAN_COLUMNS: StatusProcesso[] = [
+  "Triagem",
+  "Petição Inicial",
+  "Em Andamento",
+  "Aguardando Prazo",
+  "Concluído",
+];
+
+export type NovoProcesso = Omit<Processo, 'id'>;
