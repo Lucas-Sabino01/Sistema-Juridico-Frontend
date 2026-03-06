@@ -6,6 +6,10 @@ export interface Processo {
   descricao: string;
   dataPrazo: string;
   etiquetas?: string[];
+  honorarios?: string;
+  cpfCliente?: string;
+  senhaGov?: string;
+  arquivado?: boolean;
 }
 
 

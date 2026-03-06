@@ -1,4 +1,4 @@
-import { Scale, LayoutDashboard, CalendarDays, Settings } from "lucide-react";
+import { Scale, LayoutDashboard, CalendarDays, Settings, Archive, PieChart, Bell } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
@@ -6,8 +6,11 @@ import {
 } from "@/components/ui/sidebar";
 
 const items = [
+  { title: "Dashboard", url: "/dashboard", icon: PieChart },
   { title: "Kanban", url: "/", icon: LayoutDashboard },
+  { title: "Notificações", url: "/notificacoes", icon: Bell },
   { title: "Calendário", url: "/calendario", icon: CalendarDays },
+  { title: "Arquivo", url: "/arquivo", icon: Archive },
   { title: "Configurações", url: "/configuracoes", icon: Settings },
 ];
 

@@ -34,15 +34,15 @@ export function KanbanColumn({ status, processos, onDrop, onEdit, onDelete }: Ka
       }}
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-border/60 mb-3">
-        <h3 className="text-sm font-bold text-foreground">{status}</h3>
-        <span className="text-xs bg-secondary text-secondary-foreground font-bold rounded-full px-2.5 py-0.5">
+        <h3 className="text-base font-bold text-foreground">{status}</h3>
+        <span className="text-sm bg-secondary text-secondary-foreground font-bold rounded-full px-2.5 py-0.5">
           {processos.length}
         </span>
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 pb-3 space-y-3 custom-scrollbar">
         {processos.map((p) => (
-          <ProcessCard key={p.id} processo={p} onEdit={onEdit} onDelete={onDelete} />
+          <ProcessCard key={p.id} processo={p} onEdit={onEdit} onArchive={onDelete} />
         ))}
       </div>
     </div>

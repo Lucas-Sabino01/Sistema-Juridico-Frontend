@@ -34,6 +34,13 @@ export default function Configuracoes() {
   
   const [salvoComSucesso, setSalvoComSucesso] = useState(false);
 
+  const getTextSize = (baseSize: "xl" | "base" | "sm") => {
+    if (baseSize === "xl") return fonte === "pequena" ? "text-lg" : fonte === "grande" ? "text-2xl" : "text-xl";
+    if (baseSize === "base") return fonte === "pequena" ? "text-sm" : fonte === "grande" ? "text-lg" : "text-base";
+    if (baseSize === "sm") return fonte === "pequena" ? "text-xs" : fonte === "grande" ? "text-base" : "text-sm";
+    return "";
+  };
+
   const handleSalvar = () => {
     setSalvoComSucesso(true);
     setTimeout(() => setSalvoComSucesso(false), 3000);
@@ -51,7 +58,7 @@ export default function Configuracoes() {
         {/* Aparência */}
         <Card className="shadow-sm border-border">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl text-foreground">
+            <CardTitle className={`flex items-center gap-2 text-foreground ${getTextSize("xl")}`}>
               <Palette className="h-5 w-5 text-primary" />
               Aparência e Acessibilidade
             </CardTitle>
@@ -61,8 +68,8 @@ export default function Configuracoes() {
             
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label className="text-base font-semibold text-foreground">Tema do Sistema</Label>
-                <p className="text-sm text-muted-foreground">Escolha entre o modo claro e o modo noturno.</p>
+                <Label className={`font-semibold text-foreground ${getTextSize("base")}`}>Tema do Sistema</Label>
+                <p className={`text-muted-foreground ${getTextSize("sm")}`}>Escolha entre o modo claro e o modo noturno.</p>
               </div>
               <Select value={tema} onValueChange={(v: any) => setTema(v)}>
                 <SelectTrigger className="w-[180px] bg-card text-foreground">
@@ -79,8 +86,8 @@ export default function Configuracoes() {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label className="text-base font-semibold text-foreground">Tamanho da Fonte</Label>
-                <p className="text-sm text-muted-foreground">Aumente as letras se preferir uma leitura mais confortável.</p>
+                <Label className={`font-semibold text-foreground ${getTextSize("base")}`}>Tamanho da Fonte</Label>
+                <p className={`text-muted-foreground ${getTextSize("sm")}`}>Aumente as letras se preferir uma leitura mais confortável.</p>
               </div>
               <Select value={fonte} onValueChange={(v: any) => setFonte(v)}>
                 <SelectTrigger className="w-[180px] bg-card text-foreground">
@@ -98,8 +105,8 @@ export default function Configuracoes() {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label className="text-base font-semibold text-foreground">Modo de Alto Contraste</Label>
-                <p className="text-sm text-muted-foreground">Aumenta a diferença de cores entre os fundos e os textos.</p>
+                <Label className={`font-semibold text-foreground ${getTextSize("base")}`}>Modo de Alto Contraste</Label>
+                <p className={`text-muted-foreground ${getTextSize("sm")}`}>Aumenta a diferença de cores entre os fundos e os textos.</p>
               </div>
               <CustomSwitch checked={altoContraste} onChange={setAltoContraste} />
             </div>
@@ -110,7 +117,7 @@ export default function Configuracoes() {
         {/* Preferências do Kanban */}
         <Card className="shadow-sm border-border">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-xl text-foreground">
+            <CardTitle className={`flex items-center gap-2 text-foreground ${getTextSize("xl")}`}>
               <LayoutDashboard className="h-5 w-5 text-primary" />
               Preferências do Quadro (Kanban)
             </CardTitle>
@@ -120,8 +127,8 @@ export default function Configuracoes() {
             
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label className="text-base font-semibold text-foreground">Ocultar Processos Concluídos</Label>
-                <p className="text-sm text-muted-foreground">Não mostra os processos finalizados no calendário e no quadro.</p>
+                <Label className={`font-semibold text-foreground ${getTextSize("base")}`}>Ocultar Processos Concluídos</Label>
+                <p className={`text-muted-foreground ${getTextSize("sm")}`}>Não mostra os processos finalizados no calendário e no quadro.</p>
               </div>
               <CustomSwitch checked={ocultarConcluidos} onChange={setOcultarConcluidos} />
             </div>
@@ -130,8 +137,8 @@ export default function Configuracoes() {
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label className="text-base font-semibold text-foreground">Alerta de Prazos</Label>
-                <p className="text-sm text-muted-foreground">Com quantos dias de antecedência o cartão deve ficar amarelo?</p>
+                <Label className={`font-semibold text-foreground ${getTextSize("base")}`}>Alerta de Prazos</Label>
+                <p className={`text-muted-foreground ${getTextSize("sm")}`}>Com quantos dias de antecedência o cartão deve ficar amarelo?</p>
               </div>
               <Select value={notificacaoPrazo} onValueChange={setNotificacaoPrazo}>
                 <SelectTrigger className="w-[180px] bg-card text-foreground">

@@ -9,7 +9,6 @@ import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 
 const queryClient = new QueryClient();
 
-// Extraímos o Sonner para um componente próprio para conseguir ler o contexto do tema
 const AppToaster = () => {
   const { tema } = useTheme();
   return (
@@ -18,7 +17,7 @@ const AppToaster = () => {
       richColors 
       theme={tema === "escuro" ? "dark" : "light"} 
       toastOptions={{
-        className: "rounded-2xl shadow-lg border border-border font-medium", // Deixa as notificações redondas e modernas
+        className: "rounded-2xl shadow-lg border border-border font-medium",
       }}
     />
   );
@@ -31,10 +30,9 @@ const App = () => (
         <AppToaster />
         <BrowserRouter>
           <SidebarProvider>
-            {/* O bg-background e text-foreground aqui garantem que o ecrã todo mude no modo noturno */}
             <div className="min-h-screen flex w-full bg-background text-foreground transition-colors duration-300">
               <AppSidebar />
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col min-w-0">
                 <header className="h-12 flex items-center bg-card border-b border-border transition-colors duration-300">
                   <SidebarTrigger className="ml-2" />
                 </header>

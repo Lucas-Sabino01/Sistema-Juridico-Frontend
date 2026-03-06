@@ -34,8 +34,8 @@ export default function Calendario() {
   return (
     <div className="flex flex-col h-full bg-background p-8 overflow-y-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Controlo de Prazos</h1>
-        <p className="text-muted-foreground mt-2">Visão geral dos teus vencimentos e pendências.</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Controle de Prazos</h1>
+        <p className="text-muted-foreground mt-2">Visão geral dos vencimentos e pendências.</p>
       </div>
 
       {/* Resumo */}

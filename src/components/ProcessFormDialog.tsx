@@ -8,8 +8,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
-
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { X, Eye, EyeOff, Plus, Calendar as CalendarIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { stringToColorClass, cn } from "@/lib/utils";
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 interface ProcessFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -30,6 +35,12 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
   const [etiquetas, setEtiquetas] = useState<string[]>([]);
   const [novaEtiqueta, setNovaEtiqueta] = useState("");
 
+  const [honorarios, setHonorarios] = useState("");
+  const [cpfCliente, setCpfCliente] = useState("");
+  const [senhaGov, setSenhaGov] = useState("");
+  
+  const [showFormPassword, setShowFormPassword] = useState(false);
+
   useEffect(() => {
     if (open && processo) {
       setNomeCliente(processo.nomeCliente);
@@ -38,6 +49,9 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
       setDataPrazo(processo.dataPrazo);
       setStatus(processo.status);
       setEtiquetas(processo.etiquetas || []); 
+      setHonorarios(processo.honorarios || "");
+      setCpfCliente(processo.cpfCliente || "");
+      setSenhaGov(processo.senhaGov || "");
     } else if (open) {
       setNomeCliente("");
       setNumeroProcesso("");
@@ -46,6 +60,10 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
       setStatus("Triagem");
       setEtiquetas([]);
       setNovaEtiqueta("");
+      setHonorarios("");
+      setCpfCliente("");
+      setSenhaGov("");
+      setShowFormPassword(false);
     }
   }, [open, processo]);
 
@@ -58,6 +76,31 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
       }
       setNovaEtiqueta("");
     }
+  };
+
+  const addSugestaoEtiqueta = (tag: string) => {
+    if (!etiquetas.includes(tag)) {
+      setEtiquetas([...etiquetas, tag]);
+    }
+  };
+
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ""); // keep only numbers
+    if (value.length > 11) value = value.slice(0, 11);
+    
+    // Apply CPF mask 000.000.000-00
+    if (value.length > 9) {
+      value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+    } else if (value.length > 6) {
+      value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
+    } else if (value.length > 3) {
+      value = value.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+    }
+    setCpfCliente(value);
+  };
+
+  const handleProcessoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNumeroProcesso(e.target.value.replace(/\D/g, ""));
   };
 
   const handleRemoverEtiqueta = (tagToRemove: string) => {
@@ -74,6 +117,9 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
       dataPrazo,
       status,
       etiquetas, 
+      honorarios,
+      cpfCliente,
+      senhaGov,
     };
 
     if (isEditing && processo) {
@@ -111,12 +157,64 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
               <Input
                 id="numero"
                 value={numeroProcesso}
-                onChange={(e) => setNumeroProcesso(e.target.value)}
+                onChange={handleProcessoChange}
                 required
-                placeholder="Ex: 0001234-56..."
+                placeholder="Ex: 000123456... (Somente números)"
                 className="bg-muted/50 border-input focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-ring shadow-sm"
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="cpfCliente" className="text-foreground font-medium">CPF</Label>
+              <Input
+                id="cpfCliente"
+                value={cpfCliente}
+                onChange={handleCpfChange}
+                placeholder="000.000.000-00"
+                maxLength={14}
+                className="bg-muted/50 border-input focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-ring shadow-sm"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="senhaGov" className="text-foreground font-medium">Senha Gov.br</Label>
+              <div className="relative">
+                <Input
+                  id="senhaGov"
+                  type={showFormPassword ? "text" : "password"}
+                  value={senhaGov}
+                  onChange={(e) => setSenhaGov(e.target.value)}
+                  placeholder="Senha"
+                  className="bg-muted/50 border-input pr-10 focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-ring shadow-sm"
+                />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:text-foreground cursor-pointer"
+                      onClick={() => setShowFormPassword(!showFormPassword)}
+                    >
+                      {showFormPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{showFormPassword ? "Ocultar senha" : "Ver senha"}</TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="honorarios" className="text-foreground font-medium">Honorários</Label>
+            <Input
+              id="honorarios"
+              value={honorarios}
+              onChange={(e) => setHonorarios(e.target.value)}
+              placeholder="Ex: R$ 5.000,00 ou 30% no êxito"
+              className="bg-muted/50 border-input focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-ring shadow-sm"
+            />
           </div>
 
           <div className="space-y-2">
@@ -132,15 +230,31 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="prazo" className="text-foreground font-medium">Data do Prazo</Label>
-              <Input
-                id="prazo"
-                type="date"
-                value={dataPrazo}
-                onChange={(e) => setDataPrazo(e.target.value)}
-                required
-                className="bg-muted/50 border-input focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-ring shadow-sm"
-              />
+              <Label className="text-foreground font-medium flex items-center gap-1">Data do Prazo<span className="text-destructive">*</span></Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-full justify-start text-left font-normal bg-muted/50 border-input shadow-sm focus:ring-1 focus:ring-ring h-10 px-3 cursor-pointer",
+                      !dataPrazo && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-3 h-4 w-4 opacity-70" />
+                    {dataPrazo ? format(parseISO(dataPrazo), "dd 'de' MMM, yyyy", { locale: ptBR }) : <span>Selecione uma data</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 z-50 pointer-events-auto shadow-xl border-border rounded-xl cursor-pointer" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={dataPrazo ? parseISO(dataPrazo) : undefined}
+                    onSelect={(date) => setDataPrazo(date ? format(date, 'yyyy-MM-dd') : '')}
+                    initialFocus
+                    locale={ptBR} 
+                    className="p-3 pointer-events-auto cursor-pointer"
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="space-y-2">
               <Label htmlFor="status" className="text-foreground font-medium">Fase Atual (Kanban)</Label>
@@ -157,20 +271,35 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
             </div>
           </div>
 
-          <div className="space-y-2 bg-muted/30 p-4 rounded-lg border border-border shadow-sm">
-            <Label htmlFor="etiquetas" className="text-foreground font-medium">
-              Etiquetas <span className="text-muted-foreground font-normal">(Pressione Enter para adicionar)</span>
-            </Label>
+          <div className="space-y-3 bg-muted/40 p-4 rounded-lg border border-border shadow-sm">
+            <div className="space-y-1">
+              <Label htmlFor="etiquetas" className="text-foreground font-medium">
+                Etiquetas <span className="text-muted-foreground font-normal text-xs ml-1">(Pressione Enter para adicionar)</span>
+              </Label>
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                <span className="text-[10px] uppercase font-bold text-muted-foreground mr-1 self-center">Sugestões:</span>
+                {["Urgente", "Trabalhista", "Cível", "Pendente Docs", "Revisar"].map(tag => (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => addSugestaoEtiqueta(tag)}
+                    className="text-[10px] px-2 py-0.5 rounded-full border border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <Plus className="h-3 w-3" /> {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
             
             {etiquetas.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-3">
+              <div className="flex flex-wrap gap-1.5 bg-background p-2 rounded-md border border-border/50">
                 {etiquetas.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="flex items-center gap-1 bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 transition-colors shadow-sm">
+                  <Badge key={tag} variant="secondary" className={`flex items-center gap-1 font-medium px-2 py-0.5 shadow-sm ${stringToColorClass(tag)}`}>
                     {tag}
                     <button
                       type="button"
                       onClick={() => handleRemoverEtiqueta(tag)}
-                      className="ml-1 rounded-full hover:bg-primary/30 hover:text-primary-foreground p-0.5 transition-colors"
+                      className="ml-1 rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20 p-0.5 transition-colors cursor-pointer"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -184,16 +313,16 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
               value={novaEtiqueta}
               onChange={(e) => setNovaEtiqueta(e.target.value)}
               onKeyDown={handleAdicionarEtiqueta}
-              placeholder="Ex: Urgente, Trabalhista, Aguardando Cliente..."
-              className="text-sm bg-background border-input focus-visible:ring-1 focus-visible:ring-ring focus-visible:border-ring shadow-sm outline-none"
+              placeholder="Digite uma nova etiqueta e pressione Enter..."
+              className="text-sm bg-background border-input focus-visible:ring-1 focus-visible:ring-ring shadow-sm"
             />
           </div>
 
           <DialogFooter className="pt-4 border-t border-border mt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="border-input text-muted-foreground hover:bg-accent hover:text-accent-foreground">
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="border-input text-muted-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer">
               Cancelar
             </Button>
-            <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm">
+            <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm cursor-pointer">
               {isEditing ? "Salvar Alterações" : "Criar Processo"}
             </Button>
           </DialogFooter>
