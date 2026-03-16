@@ -30,7 +30,7 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
   const [numeroProcesso, setNumeroProcesso] = useState("");
   const [descricao, setDescricao] = useState("");
   const [dataPrazo, setDataPrazo] = useState("");
-  const [status, setStatus] = useState<StatusProcesso>("Triagem");
+  const [status, setStatus] = useState<StatusProcesso>("A Fazer");
   
   const [etiquetas, setEtiquetas] = useState<string[]>([]);
   const [novaEtiqueta, setNovaEtiqueta] = useState("");
@@ -57,7 +57,7 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
       setNumeroProcesso("");
       setDescricao("");
       setDataPrazo(new Date().toISOString().split('T')[0]);
-      setStatus("Triagem");
+      setStatus("A Fazer");
       setEtiquetas([]);
       setNovaEtiqueta("");
       setHonorarios("");
@@ -85,10 +85,9 @@ export function ProcessFormDialog({ open, onOpenChange, processo, onCreate, onUp
   };
 
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, ""); // keep only numbers
+    let value = e.target.value.replace(/\D/g, "");
     if (value.length > 11) value = value.slice(0, 11);
     
-    // Apply CPF mask 000.000.000-00
     if (value.length > 9) {
       value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
     } else if (value.length > 6) {

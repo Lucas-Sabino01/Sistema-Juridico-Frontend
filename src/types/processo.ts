@@ -10,22 +10,23 @@ export interface Processo {
   cpfCliente?: string;
   senhaGov?: string;
   arquivado?: boolean;
+  telefoneCliente?: string;
 }
 
 
 export type StatusProcesso =
-  | "Triagem"
-  | "Petição Inicial"
-  | "Em Andamento"
+  | "A Fazer"
+  | "Fazendo"
+  | "Feito ou realizado"
   | "Aguardando Prazo"
   | "Concluído";
 
 export type ProcessoCreate = Omit<Processo, "id">;
 
 export const KANBAN_COLUMNS: StatusProcesso[] = [
-  "Triagem",
-  "Petição Inicial",
-  "Em Andamento",
+  "A Fazer",
+  "Fazendo",
+  "Feito ou realizado",
   "Aguardando Prazo",
   "Concluído",
 ];

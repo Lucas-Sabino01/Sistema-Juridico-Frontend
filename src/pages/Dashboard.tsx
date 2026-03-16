@@ -34,16 +34,13 @@ export default function Dashboard() {
   const arquivados = processos.filter(p => p.arquivado);
   const concluidos = ativos.filter(p => p.status === "Concluído");
   
-  // Prazos críticos (atrasados ou vencendo em até 3 dias)
   const hoje = startOfDay(new Date());
   
   const urgentes = ativos.filter(p => {
     if (p.status === "Concluído") return false;
     
-    // Processos com a tag Urgente
     if ((p.etiquetas || []).some(tag => tag && tag.toLowerCase().includes("urgente"))) return true;
     
-    // Condição de data
     if (!p.dataPrazo) return false;
     const dataPrazoObj = startOfDay(parseISO(p.dataPrazo));
     const isLate = isBefore(dataPrazoObj, hoje);
@@ -53,9 +50,9 @@ export default function Dashboard() {
   });
 
   const porStatus = {
-    "Triagem": ativos.filter(p => p.status === "Triagem").length,
-    "Petição Inicial": ativos.filter(p => p.status === "Petição Inicial").length,
-    "Em Andamento": ativos.filter(p => p.status === "Em Andamento").length,
+    "Triagem": ativos.filter(p => p.status === "A Fazer").length,
+    "Petição Inicial": ativos.filter(p => p.status === "Fazendo").length,
+    "Em Andamento": ativos.filter(p => p.status === "Feito ou realizado").length,
     "Aguardando Prazo": ativos.filter(p => p.status === "Aguardando Prazo").length,
     "Concluído": concluidos.length,
   };
@@ -107,7 +104,7 @@ export default function Dashboard() {
 
         {/* Cards Principais */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Processos Ativos</p>
@@ -119,7 +116,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Em Andamento</p>
@@ -133,7 +130,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Concluídos</p>
@@ -145,7 +142,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow opacity-80">
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow cursor-pointer opacity-80">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Arquivo Morto</p>

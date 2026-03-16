@@ -2,10 +2,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Processo, ProcessoCreate } from "@/types/processo";
 import { toast } from "sonner";
 
-const API_URL = "http://localhost:8080/api/processos";
+const API_URL = "/api/processos";
 
 async function fetchProcessos(): Promise<Processo[]> {
-  const res = await fetch(API_URL);
+  const res = await fetch(API_URL, { credentials: 'include' });
+  if (res.status === 401 || res.status === 403) {
+    window.location.href = '/login';
+    throw new Error('Não autorizado');
+  }
   if (!res.ok) throw new Error("Erro ao carregar processos");
   return res.json();
 }
@@ -14,8 +18,13 @@ async function createProcesso(data: ProcessoCreate): Promise<Processo> {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: 'include',
     body: JSON.stringify(data),
   });
+  if (res.status === 401 || res.status === 403) {
+    window.location.href = '/login';
+    throw new Error('Não autorizado');
+  }
   if (!res.ok) throw new Error("Erro ao criar processo");
   return res.json();
 }
@@ -24,14 +33,26 @@ async function updateProcesso(data: Processo): Promise<Processo> {
   const res = await fetch(`${API_URL}/${data.id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
+    credentials: 'include',
     body: JSON.stringify(data),
   });
+  if (res.status === 401 || res.status === 403) {
+    window.location.href = '/login';
+    throw new Error('Não autorizado');
+  }
   if (!res.ok) throw new Error("Erro ao atualizar processo");
   return res.json();
 }
 
 async function deleteProcesso(id: number): Promise<void> {
-  const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  const res = await fetch(`${API_URL}/${id}`, { 
+    method: "DELETE",
+    credentials: 'include',
+  });
+  if (res.status === 401 || res.status === 403) {
+    window.location.href = '/login';
+    throw new Error('Não autorizado');
+  }
   if (!res.ok) throw new Error("Erro ao excluir processo");
 }
 

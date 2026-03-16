@@ -2,10 +2,10 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
 import { AppRoutes } from "./routes/routes";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
+
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -25,26 +25,16 @@ const AppToaster = () => {
 
 const App = () => (
   <ThemeProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AppToaster />
-        <BrowserRouter>
-          <SidebarProvider>
-            <div className="min-h-screen flex w-full bg-background text-foreground transition-colors duration-300">
-              <AppSidebar />
-              <div className="flex-1 flex flex-col min-w-0">
-                <header className="h-12 flex items-center bg-card border-b border-border transition-colors duration-300">
-                  <SidebarTrigger className="ml-2" />
-                </header>
-                <main className="flex-1 overflow-hidden">
-                  <AppRoutes />
-                </main>
-              </div>
-            </div>
-          </SidebarProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <AppToaster />
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </AuthProvider>
   </ThemeProvider>
 );
 

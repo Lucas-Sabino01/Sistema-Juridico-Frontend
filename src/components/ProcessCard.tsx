@@ -31,9 +31,9 @@ function getPrazoBadge(dataPrazo: string) {
 
 function getStatusBorderColor(status: string) {
   switch (status) {
-    case "Triagem": return "border-l-blue-500";
-    case "Petição Inicial": return "border-l-purple-500";
-    case "Em Andamento": return "border-l-amber-500";
+    case "A Fazer": return "border-l-blue-500";
+    case "Fazendo": return "border-l-purple-500";
+    case "Feito ou realizado": return "border-l-amber-500";
     case "Aguardando Prazo": return "border-l-orange-500";
     case "Concluído": return "border-l-emerald-500";
     default: return "border-l-primary";
@@ -42,9 +42,9 @@ function getStatusBorderColor(status: string) {
 
 function getStatusBackgroundColor(status: string) {
   switch (status) {
-    case "Triagem": return "bg-blue-500/15 dark:bg-blue-500/10 hover:bg-blue-500/10 dark:hover:bg-blue-500/20";
-    case "Petição Inicial": return "bg-purple-500/15 dark:bg-purple-500/10 hover:bg-purple-500/10 dark:hover:bg-purple-500/20";
-    case "Em Andamento": return "bg-amber-500/15 dark:bg-amber-500/10 hover:bg-amber-500/10 dark:hover:bg-amber-500/20";
+    case "A Fazer": return "bg-blue-500/15 dark:bg-blue-500/10 hover:bg-blue-500/10 dark:hover:bg-blue-500/20";
+    case "Fazendo": return "bg-purple-500/15 dark:bg-purple-500/10 hover:bg-purple-500/10 dark:hover:bg-purple-500/20";
+    case "Feito ou realizado": return "bg-amber-500/15 dark:bg-amber-500/10 hover:bg-amber-500/10 dark:hover:bg-amber-500/20";
     case "Aguardando Prazo": return "bg-orange-500/15 dark:bg-orange-500/10 hover:bg-orange-500/10 dark:hover:bg-orange-500/20";
     case "Concluído": return "bg-emerald-500/15 dark:bg-emerald-500/10 hover:bg-emerald-500/10 dark:hover:bg-emerald-500/20";
     default: return "bg-card hover:bg-accent/50";

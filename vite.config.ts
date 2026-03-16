@@ -15,5 +15,11 @@ export default defineConfig({
     port: 5000,
     open: false,
     cors: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      }
+    }
   },
 })

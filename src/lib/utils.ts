@@ -20,7 +20,7 @@ export function stringToColorClass(str: string) {
   }
   const index = Math.abs(hash) % colors.length;
   
-  if (str.toLowerCase().includes("urgente")) {
+  if (str.toLowerCase().includes("urgente") || str.toLowerCase() === "prazo judicial") {
     return "bg-red-500 text-white font-bold";
   }
   
