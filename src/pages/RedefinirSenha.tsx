@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Loader2, Lock, Mail, KeyRound, ShieldAlert, ArrowRight } from 'lucide-react';
+import { BASE_URL } from '@/lib/api';
 
 export default function RedefinirSenha() {
   const location = useLocation();
@@ -33,7 +34,7 @@ export default function RedefinirSenha() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/redefinir-senha', {
+      const response = await fetch(`${BASE_URL}/api/auth/redefinir-senha`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

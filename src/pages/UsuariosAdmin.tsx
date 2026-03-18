@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { toast } from 'sonner';
 import { Loader2, Users, Shield, UserPlus, Mail, User } from 'lucide-react';
+import { BASE_URL } from '@/lib/api';
 
 interface Usuario {
   id: number;
@@ -26,7 +27,7 @@ export default function UsuariosAdmin() {
   const fetchUsuarios = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/usuarios', {
+      const response = await fetch(`${BASE_URL}/api/usuarios`, {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
@@ -53,7 +54,7 @@ export default function UsuariosAdmin() {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/usuarios', {
+      const response = await fetch(`${BASE_URL}/api/usuarios`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

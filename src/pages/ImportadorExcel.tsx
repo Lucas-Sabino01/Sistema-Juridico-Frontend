@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { toast } from "sonner";
 import { Loader2, Upload, FileSpreadsheet, Trash2, AlertTriangle } from "lucide-react";
 import type { NovoProcesso, StatusProcesso } from "@/types/processo";
+import { BASE_URL } from "@/lib/api";
 
 export default function ImportadorExcel() {
   const [rawData, setRawData] = useState("");
@@ -109,7 +110,7 @@ export default function ImportadorExcel() {
 
     for (const processo of previewData) {
       try {
-        const response = await fetch("/api/processos", {
+        const response = await fetch(`${BASE_URL}/api/processos`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -137,12 +138,12 @@ export default function ImportadorExcel() {
     
     setIsDeleting(true);
     try {
-      const res = await fetch("/api/processos", { credentials: "include" });
+      const res = await fetch(`${BASE_URL}/api/processos`, { credentials: "include" });
       const data = await res.json();
       
       let deletados = 0;
       for (const p of data) {
-        await fetch(`/api/processos/${p.id}`, { method: "DELETE", credentials: "include" });
+        await fetch(`${BASE_URL}/api/processos/${p.id}`, { method: "DELETE", credentials: "include" });
         deletados++;
       }
       

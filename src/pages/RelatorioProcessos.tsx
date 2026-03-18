@@ -10,6 +10,7 @@ import { format, parseISO } from "date-fns";
 import { Loader2, Search, Download, FileText, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn, stringToColorClass } from "@/lib/utils";
+import { BASE_URL } from "@/lib/api";
 
 const STATUS_STYLES: Record<string, { badge: string; row: string }> = {
   "A Fazer":           { badge: "bg-rose-100 text-rose-700 border-rose-300 dark:bg-rose-900/40 dark:text-rose-300 dark:border-rose-700",               row: "bg-rose-50 dark:bg-rose-950/30" },
@@ -50,7 +51,7 @@ export default function RelatorioProcessos() {
   const handleExportarExcel = async () => {
     try {
       setIsExporting(true);
-      const response = await fetch("/api/processos/exportar", { credentials: "include" });
+      const response = await fetch(`${BASE_URL}/api/processos/exportar`, { credentials: "include" });
       if (!response.ok) throw new Error();
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);

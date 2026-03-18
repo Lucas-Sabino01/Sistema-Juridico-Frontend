@@ -1,8 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Processo, ProcessoCreate } from "@/types/processo";
 import { toast } from "sonner";
+import { BASE_URL } from "@/lib/api";
 
-const API_URL = "/api/processos";
+const API_URL = `${BASE_URL}/api/processos`;
 
 async function fetchProcessos(): Promise<Processo[]> {
   const res = await fetch(API_URL, { credentials: 'include' });
