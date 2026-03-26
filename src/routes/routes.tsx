@@ -13,6 +13,7 @@ import RedefinirSenha from "../pages/RedefinirSenha";
 import UsuariosAdmin from "../pages/UsuariosAdmin";
 import RelatorioProcessos from "../pages/RelatorioProcessos";
 import ImportadorExcel from "../pages/ImportadorExcel";
+import ExtratorAudiencia from "../pages/ExtratorAudiencia";
 
 function MainLayout() {
   return (
@@ -48,6 +49,7 @@ export function AppRoutes() {
         <Route path="/admin/usuarios" element={<UsuariosAdmin />} />
         <Route path="/relatorios" element={<RelatorioProcessos />} />
         <Route path="/importar" element={<ImportadorExcel />} />
+        <Route path="/extrator-audiencia" element={<ExtratorAudiencia />} />
       </Route>
       
       <Route path="*" element={<NotFound />} />
