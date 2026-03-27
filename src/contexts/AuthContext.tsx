@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
 interface AuthContextType {
@@ -14,6 +14,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = () => setIsAuthenticated(true);
   const logout = () => setIsAuthenticated(false);
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      console.log("🔒 Evento 'auth:unauthorized' recebido. Limpando a sessão...");
+      logout();
+    };
+
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    
+    return () => {
+      window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    };
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>

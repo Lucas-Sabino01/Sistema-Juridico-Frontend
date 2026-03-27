@@ -3,6 +3,7 @@ import type { DragEvent, ChangeEvent } from "react";
 import { UploadCloud, Clipboard, Check, FileText, Loader2, AlertTriangle, ShieldCheck, Info, Trash2, Play } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent} from "@/components/ui/card";
+import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -125,10 +126,8 @@ export default function ExtratorAudiencia() {
         const formData = new FormData();
         formData.append("file", item.file);
 
-        const response = await fetch("/api/audiencias/extrair", {
-          method: "POST",
-          body: formData,
-        });
+        // A chamada agora usa a nossa API centralizada (o que já envia as cookies / trata os 401s por debaixo dos panos)
+        const response = await api.post("/api/audiencias/extrair", formData);
 
         if (response.status === 429) {
           throw new Error("QUOTA_EXCEEDED");
